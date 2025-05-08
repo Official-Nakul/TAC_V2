@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import Chat from "../chat/Page";
 import { AddApiForm } from "../apiForm/Page";
+import Notifications from "../Notification/Page";
 
 export default function Page() {
   const [activeView, setActiveView] = useState("Ask AI");
@@ -41,6 +42,8 @@ export default function Page() {
             <Chat />
           ) : activeView === "Add API" ? (
             <AddApiForm />
+          ) : activeView === "Notifications" ? (
+            <Notifications />
           ) : null}
         </SidebarInset>
       </SidebarProvider>

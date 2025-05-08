@@ -38,9 +38,8 @@ const data = {
   navMain: [
     {
       title: "Ask AI",
-      url: "#",
+      url: "/",
       icon: Sparkles,
-      isActive: true,
     },
     {
       title: "Add API",
@@ -48,7 +47,7 @@ const data = {
       icon: File,
     },
     {
-      title: "Inbox",
+      title: "Notifications",
       url: "#",
       icon: Inbox,
       badge: "10",

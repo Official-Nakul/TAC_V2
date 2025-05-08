@@ -1,5 +1,6 @@
 import "./App.css";
-import Page from "./app/dashboard/Page";
+import DashboardPage from "./app/dashboard/Page";
+import NotificationPage from "./app/Notification/Page";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import {
   SignIn,
@@ -21,11 +22,11 @@ function App() {
           element={<SignUp routing="path" path="/sign-up" />}
         />
         <Route
-          path="/*"
+          path="/"
           element={
             <>
               <SignedIn>
-                <Page />
+                <DashboardPage />
               </SignedIn>
               <SignedOut>
                 <RedirectToSignIn />
@@ -33,6 +34,20 @@ function App() {
             </>
           }
         />
+        <Route
+          path="/notifications"
+          element={
+            <>
+              <SignedIn>
+                <NotificationPage />
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn />
+              </SignedOut>
+            </>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

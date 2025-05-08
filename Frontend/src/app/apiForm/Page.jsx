@@ -366,7 +366,7 @@ export function AddApiForm() {
   };
 
   return (
-    <Card className="rounded-none h-full">
+    <Card className="rounded-none h-full bg-card text-card-foreground">
       <CardHeader>
         <CardTitle>Add New API Integration</CardTitle>
       </CardHeader>
@@ -425,7 +425,7 @@ export function AddApiForm() {
 
             <div className="space-y-2">
               <Label htmlFor="headers">Headers</Label>
-              <div className="space-y-2 border rounded-md p-3">
+              <div className="space-y-2 border rounded-md p-3 bg-background">
                 <div className="flex items-center gap-2 mb-3">
                   <p className="text-sm text-muted-foreground flex-1">
                     Common headers:
@@ -504,7 +504,7 @@ export function AddApiForm() {
           <div className="mt-6">
             <h3 className="text-lg font-medium mb-3">Endpoints</h3>
 
-            <div className="border rounded-md">
+            <div className="border rounded-md bg-card">
               <Table>
                 <TableHeader>
                   <TableRow>

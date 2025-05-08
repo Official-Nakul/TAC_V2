@@ -6,13 +6,18 @@ import { Send, Code } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { atomOneDark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
+import {
+  atomOneDark,
+  atomOneLight,
+} from "react-syntax-highlighter/dist/cjs/styles/hljs";
+import { useTheme } from "@/components/theme-provider";
 
 // API URL configuration - change this when deploying
 const API_URL = "https://tenant-aware-chatbot-agent.onrender.com/query/";
 // const API_URL = "http://localhost:8000/query/";
 
 export default function Chat() {
+  const { theme } = useTheme();
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([
     {
@@ -118,7 +123,7 @@ export default function Chat() {
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
                   <SyntaxHighlighter
-                    style={atomOneDark}
+                    style={theme === "dark" ? atomOneDark : atomOneLight}
                     language={match[1]}
                     PreTag="div"
                     {...props}
@@ -151,7 +156,7 @@ export default function Chat() {
                   API Request Details
                 </h4>
                 <SyntaxHighlighter
-                  style={atomOneDark}
+                  style={theme === "dark" ? atomOneDark : atomOneLight}
                   language="json"
                   PreTag="div"
                   className="rounded-md text-sm max-h-fit overflow-y-auto"
@@ -167,7 +172,7 @@ export default function Chat() {
                     API Response Data
                   </h4>
                   <SyntaxHighlighter
-                    style={atomOneDark}
+                    style={theme === "dark" ? atomOneDark : atomOneLight}
                     language="json"
                     PreTag="div"
                     className="rounded-md text-sm max-h-96 overflow-y-auto"
@@ -205,8 +210,8 @@ export default function Chat() {
                       : "max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl"
                   } rounded-lg overflow-hidden ${
                     message.sender === "human"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-100 text-black"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-foreground"
                   }`}
                 >
                   <div className="p-3">{renderMessageContent(message)}</div>
@@ -215,11 +220,11 @@ export default function Chat() {
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 text-black rounded-lg p-3">
+                <div className="bg-muted text-foreground rounded-lg p-3">
                   <div className="flex space-x-2">
-                    <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"></div>
-                    <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce delay-75"></div>
-                    <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce delay-150"></div>
+                    <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"></div>
+                    <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce delay-75"></div>
+                    <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce delay-150"></div>
                   </div>
                 </div>
               </div>
@@ -228,7 +233,7 @@ export default function Chat() {
           </div>
         </CardContent>
 
-        <CardFooter className="self-end w-full sticky bottom-0 bg-white border-t flex-col p-3">
+        <CardFooter className="self-end w-full sticky bottom-0 bg-card border-t flex-col p-3">
           <form onSubmit={handleSubmit} className="flex w-full gap-2">
             <Input
               type="text"
