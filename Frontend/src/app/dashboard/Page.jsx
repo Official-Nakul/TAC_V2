@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { NavActions } from "@/components/nav-actions";
 import { ThemeProvider, ThemeToggle } from "@/components/theme-provider";
@@ -13,36 +14,34 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import Chat from "../chat/Page";
+import { AddApiForm } from "../apiForm/Page";
 
 export default function Page() {
+  const [activeView, setActiveView] = useState("Ask AI");
+
   return (
     <ThemeProvider>
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar onNavItemClick={setActiveView} />
         <SidebarInset>
           <header className="flex h-14 shrink-0 items-center gap-2">
             <div className="flex flex-1 items-center gap-2 px-3">
               <SidebarTrigger />
-              <Separator orientation="vertical" className="mr-2 h-4" />
-              {/* <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbPage className="line-clamp-1">
-                      Project Management & Task Tracking
-                    </BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb> */}
+              <h1 className="text-lg font-medium">{activeView}</h1>
+
+              {/* <Separator orientation="vertical" className="mr-2 h-4" /> */}
             </div>
             <div className="ml-auto px-3 flex items-center gap-2">
               <ThemeToggle />
               {/* <NavActions /> */}
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 px-4 py-10">
-            <div className="mx-auto h-24 w-full max-w-3xl rounded-xl bg-muted/50" />
-            <div className="mx-auto h-full w-full max-w-3xl rounded-xl bg-muted/50" />
-          </div>
+          {activeView === "Ask AI" ? (
+            <Chat />
+          ) : activeView === "Add API" ? (
+            <AddApiForm />
+          ) : null}
         </SidebarInset>
       </SidebarProvider>
     </ThemeProvider>

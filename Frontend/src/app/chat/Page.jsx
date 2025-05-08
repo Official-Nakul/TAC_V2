@@ -12,7 +12,7 @@ import { atomOneDark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 const API_URL = "https://tenant-aware-chatbot-agent.onrender.com/query/";
 // const API_URL = "http://localhost:8000/query/";
 
-export function Chat() {
+export default function Chat() {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([
     {

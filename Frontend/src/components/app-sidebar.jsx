@@ -11,6 +11,7 @@ import {
   Settings2,
   Sparkles,
   Trash2,
+  File,
 } from "lucide-react";
 
 import { NavFavorites } from "@/components/nav-favorites";
@@ -34,39 +35,17 @@ import { useUser } from "@clerk/clerk-react";
 
 // This is sample data.
 const data = {
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: Command,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
-    {
-      title: "Search",
-      url: "#",
-      icon: Search,
-    },
     {
       title: "Ask AI",
       url: "#",
       icon: Sparkles,
+      isActive: true,
     },
     {
-      title: "Home",
+      title: "Add API",
       url: "#",
-      icon: Home,
-      isActive: true,
+      icon: File,
     },
     {
       title: "Inbox",
@@ -285,7 +264,6 @@ export function AppSidebar({ onNavItemClick, ...props }) {
             </span>
           </div>
         )}
-        {/* <TeamSwitcher teams={data.teams} /> */}
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -318,9 +296,7 @@ export function AppSidebar({ onNavItemClick, ...props }) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <NavFavorites favorites={data.history} />
-        {/* <NavWorkspaces workspaces={data.workspaces} /> */}
-        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
+        <NavFavorites favorites={history} />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
