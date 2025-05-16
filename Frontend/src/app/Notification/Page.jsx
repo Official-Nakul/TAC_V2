@@ -30,6 +30,13 @@ import { setupHourlyWeatherNotifications } from "../../../utils/WeatherNotificat
 import { Button } from "@/components/ui/button";
 import { CloudSun, AlertTriangle } from "lucide-react";
 
+// Import notification service
+import {
+  fetchNotifications,
+  saveNotification,
+  markNotificationAsRead,
+} from "../../services/notificationService";
+
 function Notifications() {
   const [notifications, setNotifications] = useState([
     {
@@ -74,6 +81,10 @@ function Notifications() {
     },
   ]);
 
+  // State to track if we're loading notifications from the backend
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const [filter, setFilter] = useState("all");
   const [weatherEnabled, setWeatherEnabled] = useState(false);
   const [weatherCity, setWeatherCity] = useState("gandhinagar");
@@ -82,8 +93,44 @@ function Notifications() {
   const [weatherError, setWeatherError] = useState(null);
   const weatherNotifierRef = useRef(null);
 
+  // Load notifications from the backend
+  const loadNotifications = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const backendNotifications = await fetchNotifications();
+      // Transform backend format to frontend format
+      const transformedNotifications = backendNotifications.map(notification => ({
+        id: notification._id,
+        title: notification.title,
+        description: notification.message,
+        timestamp: new Date(notification.createdAt).toLocaleString(),
+        read: notification.isRead,
+        type: mapBackendType(notification.type),
+      }));
+      setNotifications(transformedNotifications);
+    } catch (err) {
+      console.error('Error loading notifications:', err);
+      setError('Failed to load notifications. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Map backend notification types to frontend types
+  const mapBackendType = (backendType) => {
+    switch(backendType) {
+      case 'info': return 'system';
+      case 'success': return 'task';
+      case 'warning': return 'weather-alert';
+      case 'error': return 'system';
+      default: return 'system';
+    }
+  };
+
   // Function to add a new notification
-  const addNotification = (notification) => {
+  const addNotification = async (notification) => {
+    // Add to local state first for immediate UI update
     setNotifications((prev) => [notification, ...prev]);
 
     // Clear any previous error if we get a successful notification
@@ -97,6 +144,14 @@ function Notifications() {
       notification.title.includes("Error")
     ) {
       setWeatherError(notification.description);
+    }
+
+    // Save to backend database
+    try {
+      await saveNotification(notification);
+    } catch (err) {
+      console.error('Error saving notification to database:', err);
+      // We don't show this error to the user since the notification is already in the UI
     }
   };
 
@@ -173,13 +228,32 @@ function Notifications() {
     }
   };
 
-  const markAsRead = (id) => {
+  const markAsRead = async (id) => {
+    // Update UI immediately
     setNotifications(
       notifications.map((notification) =>
         notification.id === id ? { ...notification, read: true } : notification
       )
     );
+    
+    // Update in the database
+    try {
+      await markNotificationAsRead(id);
+    } catch (err) {
+      console.error('Error marking notification as read in database:', err);
+      // We don't revert the UI change to avoid confusion
+    }
   };
+  
+  // Load notifications from backend when component mounts
+  useEffect(() => {
+    loadNotifications();
+  }, []);
+  
+  // Show error message if there was an error loading notifications
+  if (error) {
+    console.error('Failed to load notifications:', error);
+  }
 
   const filteredNotifications =
     filter === "all"
